@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<table class="calendar-table" style="width:100%; border-collapse:collapse;">
+    <thead>
+        <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+    </thead>
+    <tbody id="calendar-table-body"></tbody>
+</table>
+<script>
+    function renderCalendarTable() {
+        const date = new Date();
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+
+        let rows = '';
+        let day = 1;
+        for (let i = 0; i < 6; i++) { // max 6 weeks
+            let row = '<tr>';
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDay) {
+                    row += '<td></td>';
+                } else if (day > daysInMonth) {
+                    row += '<td></td>';
+                } else {
+                    row += `<td>${day}</td>`;
+                    day++;
+                }
+            }
+            row += '</tr>';
+            rows += row;
+            if (day > daysInMonth) break;
+        }
+        document.getElementById('calendar-table-body').innerHTML = rows;
+    }
+    renderCalendarTable();
+</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Calendar</title>
+    <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+    <div class="calendar">
+        <div class="calendar-header">
+            <span id="month-year"></span>
+        </div>
+        <div class="calendar-days">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div class="calendar-dates" id="calendar-dates"></div>
+    </div>
+    <script>
+        function renderCalendar() {
+            const date = new Date();
+            const month = date.getMonth();
+            const year = date.getFullYear();
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            document.getElementById('month-year').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let datesHtml = '';
+            for (let i = 0; i < firstDay; i++) {
+                datesHtml += `<div class="empty"></div>`;
+            }
+            for (let d = 1; d <= daysInMonth; d++) {
+                datesHtml += `<div>${d}</div>`;
+            }
+            document.getElementById('calendar-dates').innerHTML = datesHtml;
+        }
+        renderCalendar();
+    </script>
+</body>
+</html>
